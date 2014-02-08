@@ -94,6 +94,7 @@ NotepadWindow::NotepadWindow(QWidget *parent)
 
     //Por mi toolbar
     toolbarMenu_ = new QToolBar(this);
+    this->addToolBar(toolbarMenu_);
 
 }
 
