@@ -7,7 +7,7 @@ NotepadWindow::NotepadWindow(QWidget *parent)
     this->setGeometry(30, 30, 800, 600);
 
     //Establecemos el título de la ventana
-    this->setWindowTitle(tr("Editor de texto plano"));
+    this->setWindowTitle(tr("Editor QTextEdit"));
 
     //Inicializamos los menús
     mainMenu_ = new QMenuBar(this); //Ponemos el menu arriba
@@ -45,7 +45,7 @@ NotepadWindow::NotepadWindow(QWidget *parent)
     this->setMenuBar(mainMenu_);
 
     //Inicializamos el editor de texto
-    txtEditor_ = new QPlainTextEdit(this);
+    txtEditor_ = new QTextEdit(this);
 
     //Conectamos las acciones de los menús con nuestros slots
     connect(actArchivoAbrir_, SIGNAL(triggered()), this, SLOT(alAbrir()));
@@ -96,6 +96,26 @@ NotepadWindow::NotepadWindow(QWidget *parent)
     toolbarMenu_ = new QToolBar(this);
     this->addToolBar(toolbarMenu_);
 
+    actToolbarGuardar_ = new QAction(tr("S"),this);
+    toolbarMenu_->addAction(actToolbarGuardar_);
+    connect(actToolbarGuardar_, SIGNAL(triggered()), this, SLOT(alGuardar()));
+
+    actToolbarCopiar_ = new QAction(tr("C"),this);
+    toolbarMenu_->addAction(actToolbarCopiar_);
+    connect(actToolbarCopiar_, SIGNAL(triggered()), txtEditor_, SLOT(copy()));
+
+    actToolbarPegar_ = new QAction(tr("P"),this);
+    toolbarMenu_->addAction(actToolbarPegar_);
+    connect(actToolbarPegar_, SIGNAL(triggered()), txtEditor_, SLOT(paste()));
+
+    actToolbarDeshacer_ = new QAction(tr("<-"),this);
+    toolbarMenu_->addAction(actToolbarDeshacer_);
+    connect(actToolbarDeshacer_, SIGNAL(triggered()), txtEditor_, SLOT(undo()));
+
+    actToolbarRehacer_ = new QAction(tr("->"),this);
+    toolbarMenu_->addAction(actToolbarRehacer_);
+    connect(actToolbarRehacer_, SIGNAL(triggered()), txtEditor_, SLOT(redo()));
+
 }
 
 NotepadWindow::~NotepadWindow()
@@ -111,6 +131,15 @@ NotepadWindow::~NotepadWindow()
     actFormatoFuente_->deleteLater();
     mnuFormato_->deleteLater();
     txtEditor_->deleteLater();
+    //Por mi
+    mnuAyuda_->deleteLater();
+    actAyudaAcercade_->deleteLater();
+    toolbarMenu_->deleteLater();
+    actToolbarCopiar_->deleteLater();
+    actToolbarPegar_->deleteLater();
+    actToolbarGuardar_->deleteLater();
+    actToolbarDeshacer_->deleteLater();
+    actToolbarRehacer_->deleteLater();
 }
 
 void NotepadWindow::alAbrir()
@@ -153,13 +182,34 @@ void NotepadWindow::alFuente()
     QFont font = QFontDialog::getFont(&ok, txtEditor_->font(), this);
     if (ok) {
         // Si el usuario hizo click en OK, se establece la fuente seleccionada
-        txtEditor_->setFont(font);
+        txtEditor_->setCurrentFont(font);
+
+        //Se aplica solo a lo seleccionado, PERO tambien a lo que escribas despues
+        //El fallo posiblemente este en la forma de aplicar a setCurrentFont, que se lo aplico a lo seleccionado, pero tambien lo dejo como
+        //fuente de todo txtEditor_ menos de lo que ya estaba escrito pero no seleccionado que no cambia
     }
 }
 
 void NotepadWindow::alAcercade()
 {
+
     QMessageBox msgBox;
     msgBox.setText("Esto es un editor de texto \nEnserio necesitas más ayuda?");
     msgBox.exec();
+
+    //Intento con error de crear una ventana con el mensaje ayuda
+    //EL fallo, o uno de ellos esta en el connect, posiblemente con el this
+
+    /*QWidget mensajeAyuda;
+    mensajeAyuda.resize(400,300);
+    mensajeAyuda.setWindowTitle(tr("Ventana de ayuda"));
+    QLabel etiqueta("Cosas de ayuda", &mensajeAyuda);
+    QPushButton ok("ok", &mensajeAyuda);
+    ok.setFont(QFont("Times",18,QFont::Bold));
+    ok.setGeometry(180,280,200,290);
+    connect(&ok,SIGNAL(clicked()),this,SLOT(quit()));
+
+    mensajeAyuda.show();
+    */
+
 }

@@ -6,7 +6,7 @@
 #include <QMenuBar>
 #include <QMenu>
 #include <QAction>
-#include <QPlainTextEdit>
+#include <QTextEdit>
 #include <QFileDialog>
 #include <QFile>
 #include <QFontDialog>
@@ -15,6 +15,17 @@
 //incluidas por mi
 #include <QMessageBox>
 #include <QToolBar>
+#include <QWidget>
+#include <QPushButton>
+#include <QLabel>
+#include <QApplication>
+
+/*
+ * REPARAR:
+ * Una forma mejor de hacer el mensaje de ayuda
+ * Que la fuente no se aplique a lo que escribo despues
+ * Lo mismo que pasa con la fuente, con la negrita, cursiva y subrayado
+ */
 
 class NotepadWindow : public QMainWindow
 {
@@ -40,7 +51,7 @@ private:
     QMenu* mnuEditar_;
     QAction* actEditarCopiar_;
     QAction* actEditarPegar_;
-    QPlainTextEdit* txtEditor_;
+    QTextEdit* txtEditor_;
     QClipboard * portapapeles_;
     //por mi
     QAction* actArchivoCerrar_;
@@ -50,8 +61,11 @@ private:
     QMenu* mnuAyuda_;
     QAction* actAyudaAcercade_;
     QToolBar* toolbarMenu_;
-
-
+    QAction* actToolbarCopiar_;
+    QAction* actToolbarPegar_;
+    QAction* actToolbarGuardar_;
+    QAction* actToolbarDeshacer_;
+    QAction* actToolbarRehacer_;
 
 
 };
