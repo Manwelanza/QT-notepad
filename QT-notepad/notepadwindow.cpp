@@ -24,6 +24,13 @@ NotepadWindow::NotepadWindow(QWidget *parent)
     actArchivoGuardar_->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
     mnuArchivo_->addAction(actArchivoGuardar_);
 
+    //Por mi Guardar Como
+
+    actArchivoGuardarComo_ = new QAction(QIcon("guardarcomo.png"),tr("Guardar Como"), this);
+    mnuArchivo_->addAction(actArchivoGuardarComo_);
+    connect(actArchivoGuardarComo_, SIGNAL(triggered()), this, SLOT(alGuardarComo()));
+
+
     mnuEditar_ = new QMenu(tr("&Editar"), this);
     mainMenu_->addMenu(mnuEditar_);
 
@@ -154,6 +161,7 @@ NotepadWindow::~NotepadWindow()
     actToolBarNegrita_->deleteLater();
     actToolBarCursiva_->deleteLater();
     actToolBarSubrayado_->deleteLater();
+    actArchivoGuardarComo_->deleteLater();
 
 }
 
@@ -161,7 +169,7 @@ void NotepadWindow::alAbrir()
 {
     //Mostramos un dialogo de apertura de ficheros y almacenamos la selección (ruta) en una variable
     QString nombreArchivo;
-    nombreArchivo = QFileDialog::getOpenFileName(this,tr("Abrir archivo de texto plano"),"",tr("Archivos de texto plano (*.txt)"));
+    nombreArchivo = QFileDialog::getOpenFileName(this,tr("Abrir archivo de texto"),"",tr("Archivos de texto (*.txt)"));
     if (nombreArchivo != "") {
         //Intentamos abrir el archivo
         QFile archivo;
@@ -170,11 +178,12 @@ void NotepadWindow::alAbrir()
             //Si se pudo abrir el archivo, lo leemos y colocamos su contenido en nuestro editor
             txtEditor_->setPlainText(archivo.readAll());
             archivo.close();
+            ActualFich_=nombreArchivo;
         }
     }
 }
 
-void NotepadWindow::alGuardar()
+void NotepadWindow::alGuardarComo()
 {
     //Mostramos un dialogo de guardado de ficheros y almacenamos la selección (ruta) en una variable
     QString nombreArchivo;
@@ -187,6 +196,7 @@ void NotepadWindow::alGuardar()
             //Si se pudo abrir el archivo, escribimos el contenido del editor
             archivo.write(txtEditor_->toPlainText().toUtf8());
             archivo.close(); //cerramos el fichero
+            ActualFich_=nombreArchivo;
         }
     }
 }
@@ -289,4 +299,20 @@ void NotepadWindow::alSubrayado()
 
     //Ponemos la fuente
     txtEditor_->setCurrentFont(font);
+}
+
+void NotepadWindow::alGuardar()
+{
+    if(ActualFich_.isEmpty())
+        alGuardarComo();
+    else{
+        QFile archivo;
+        archivo.setFileName(ActualFich_);
+        if (archivo.open(QFile::WriteOnly | QFile::Truncate)) {
+            //Si se pudo abrir el archivo, escribimos el contenido del editor
+            archivo.write(txtEditor_->toPlainText().toUtf8());
+            archivo.close(); //cerramos el fichero
+        }
+    }
+
 }

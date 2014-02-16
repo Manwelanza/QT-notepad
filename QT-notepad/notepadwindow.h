@@ -17,13 +17,17 @@
 #include <QToolBar>
 #include <QWidget>
 
+//ECHO TODO LO PROPUESTO PARA CLASE
+//ECHO TODO LO PROOPUESTO PARA CASA
+//ADEMAS AÑADIDO LA OPCION DE GUARDAR COMO Y GUARDAR
 
-/*
- * REPARAR:
- * Una forma mejor de hacer el mensaje de ayuda
- * Que la fuente no se aplique a lo que escribo despues
- * Lo mismo que pasa con la fuente, con la negrita, cursiva y subrayado
- */
+/*Por Arreglar:
+ * Mejorar el mensaje de ayuda
+*/
+
+
+
+
 
 class NotepadWindow : public QMainWindow
 {
@@ -35,12 +39,13 @@ public:
 
 private slots:
     void alAbrir();
-    void alGuardar();
+    void alGuardarComo();
     void alFuente();
     void alAcercade();
     void alNegrita();
     void alCursiva();
     void alSubrayado();
+    void alGuardar();
 
 private:
     QMenuBar* mainMenu_;
@@ -65,6 +70,8 @@ private:
     QAction* actToolBarNegrita_;
     QAction* actToolBarCursiva_;
     QAction* actToolBarSubrayado_;
+    QString ActualFich_;
+    QAction* actArchivoGuardarComo_;
 
 
 
