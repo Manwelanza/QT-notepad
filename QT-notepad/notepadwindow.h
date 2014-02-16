@@ -16,9 +16,7 @@
 #include <QMessageBox>
 #include <QToolBar>
 #include <QWidget>
-#include <QPushButton>
-#include <QLabel>
-#include <QApplication>
+
 
 /*
  * REPARAR:
@@ -40,6 +38,9 @@ private slots:
     void alGuardar();
     void alFuente();
     void alAcercade();
+    void alNegrita();
+    void alCursiva();
+    void alSubrayado();
 
 private:
     QMenuBar* mainMenu_;
@@ -61,11 +62,10 @@ private:
     QMenu* mnuAyuda_;
     QAction* actAyudaAcercade_;
     QToolBar* toolbarMenu_;
-    QAction* actToolbarCopiar_;
-    QAction* actToolbarPegar_;
-    QAction* actToolbarGuardar_;
-    QAction* actToolbarDeshacer_;
-    QAction* actToolbarRehacer_;
+    QAction* actToolBarNegrita_;
+    QAction* actToolBarCursiva_;
+    QAction* actToolBarSubrayado_;
+
 
 
 };

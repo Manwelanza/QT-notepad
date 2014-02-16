@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'notepadwindow.h'
 **
-** Created: Fri Feb 14 23:21:00 2014
+** Created: Sun Feb 16 15:54:53 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_NotepadWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -35,13 +35,17 @@ static const uint qt_meta_data_NotepadWindow[] = {
       25,   14,   14,   14, 0x08,
       37,   14,   14,   14, 0x08,
       48,   14,   14,   14, 0x08,
+      61,   14,   14,   14, 0x08,
+      73,   14,   14,   14, 0x08,
+      85,   14,   14,   14, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_NotepadWindow[] = {
     "NotepadWindow\0\0alAbrir()\0alGuardar()\0"
-    "alFuente()\0alAcercade()\0"
+    "alFuente()\0alAcercade()\0alNegrita()\0"
+    "alCursiva()\0alSubrayado()\0"
 };
 
 void NotepadWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -54,6 +58,9 @@ void NotepadWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 1: _t->alGuardar(); break;
         case 2: _t->alFuente(); break;
         case 3: _t->alAcercade(); break;
+        case 4: _t->alNegrita(); break;
+        case 5: _t->alCursiva(); break;
+        case 6: _t->alSubrayado(); break;
         default: ;
         }
     }
@@ -92,9 +99,9 @@ int NotepadWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 7;
     }
     return _id;
 }

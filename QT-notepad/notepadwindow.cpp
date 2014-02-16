@@ -20,18 +20,18 @@ NotepadWindow::NotepadWindow(QWidget *parent)
     actArchivoAbrir_->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
     mnuArchivo_->addAction(actArchivoAbrir_);
 
-    actArchivoGuardar_ = new QAction(tr("&Guardar"), this);
+    actArchivoGuardar_ = new QAction(QIcon("guardar.PNG"),tr("&Guardar"), this);
     actArchivoGuardar_->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
     mnuArchivo_->addAction(actArchivoGuardar_);
 
     mnuEditar_ = new QMenu(tr("&Editar"), this);
     mainMenu_->addMenu(mnuEditar_);
 
-    actEditarCopiar_ = new QAction(tr("&Copiar"), this);
+    actEditarCopiar_ = new QAction(QIcon("copiar.png"),tr("&Copiar"), this);
     actEditarCopiar_->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_C));
     mnuEditar_->addAction(actEditarCopiar_);
 
-    actEditarPegar_ = new QAction(tr("&Pegar"), this);
+    actEditarPegar_ = new QAction(QIcon("pegar.png"),tr("&Pegar"),this);
     actEditarPegar_->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_V));
     mnuEditar_->addAction(actEditarPegar_);
 
@@ -64,13 +64,13 @@ NotepadWindow::NotepadWindow(QWidget *parent)
     connect(actArchivoCerrar_, SIGNAL(triggered()),this,SLOT(close()));
 
     //Por mi CORTAR
-    actEditarCortar_ = new QAction(tr("&Cortar"),this);
+    actEditarCortar_ = new QAction(QIcon("cortar.png"),tr("&Cortar"),this);
     mnuEditar_->addAction(actEditarCortar_);
 
     connect(actEditarCortar_, SIGNAL(triggered()), txtEditor_, SLOT(cut()));
 
     //Por mi deshacer
-    actEditarDeshacer_ = new QAction(tr("&Deshacer"),this);
+    actEditarDeshacer_ = new QAction(QIcon("deshacer.png"),tr("&Deshacer"),this);
     actEditarDeshacer_->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
     mnuEditar_->addAction(actEditarDeshacer_);
 
@@ -78,7 +78,7 @@ NotepadWindow::NotepadWindow(QWidget *parent)
 
     //Por mi rehacer
 
-    actEditarRehacer_ = new QAction(tr("&Rehacer"),this);
+    actEditarRehacer_ = new QAction(QIcon("rehacer.png"),tr("&Rehacer"),this);
     mnuEditar_->addAction(actEditarRehacer_);
 
     connect(actEditarRehacer_, SIGNAL(triggered()), txtEditor_, SLOT(redo()));
@@ -96,25 +96,41 @@ NotepadWindow::NotepadWindow(QWidget *parent)
     toolbarMenu_ = new QToolBar(this);
     this->addToolBar(toolbarMenu_);
 
-    actToolbarGuardar_ = new QAction(tr("S"),this);
-    toolbarMenu_->addAction(actToolbarGuardar_);
-    connect(actToolbarGuardar_, SIGNAL(triggered()), this, SLOT(alGuardar()));
+    //Añadimos las opciones al toolbar
 
-    actToolbarCopiar_ = new QAction(tr("C"),this);
-    toolbarMenu_->addAction(actToolbarCopiar_);
-    connect(actToolbarCopiar_, SIGNAL(triggered()), txtEditor_, SLOT(copy()));
+    toolbarMenu_->addAction(actArchivoGuardar_);
 
-    actToolbarPegar_ = new QAction(tr("P"),this);
-    toolbarMenu_->addAction(actToolbarPegar_);
-    connect(actToolbarPegar_, SIGNAL(triggered()), txtEditor_, SLOT(paste()));
+    toolbarMenu_->addAction(actEditarCopiar_);
 
-    actToolbarDeshacer_ = new QAction(tr("<-"),this);
-    toolbarMenu_->addAction(actToolbarDeshacer_);
-    connect(actToolbarDeshacer_, SIGNAL(triggered()), txtEditor_, SLOT(undo()));
+    toolbarMenu_->addAction(actEditarCortar_);
 
-    actToolbarRehacer_ = new QAction(tr("->"),this);
-    toolbarMenu_->addAction(actToolbarRehacer_);
-    connect(actToolbarRehacer_, SIGNAL(triggered()), txtEditor_, SLOT(redo()));
+    toolbarMenu_->addAction(actEditarPegar_);
+
+    toolbarMenu_->addAction(actEditarDeshacer_);
+
+    toolbarMenu_->addAction(actEditarRehacer_);
+
+    //Por mi Negrita
+
+    actToolBarNegrita_ = new QAction(QIcon("negrita.png"),tr("Negrita"),this);
+    toolbarMenu_->addAction(actToolBarNegrita_);
+    connect(actToolBarNegrita_, SIGNAL(triggered()), this, SLOT(alNegrita()));
+
+
+    //Por mi Cursiva
+
+    actToolBarCursiva_ = new QAction(QIcon("cursiva.png"),tr("Cursiva"),this);
+    toolbarMenu_->addAction(actToolBarCursiva_);
+    connect(actToolBarCursiva_, SIGNAL(triggered()), this, SLOT(alCursiva()));
+
+
+    //Por mi Subrayado
+
+    actToolBarSubrayado_ = new QAction(QIcon("subrayado.png"),tr("Subrayado"),this);
+    toolbarMenu_->addAction(actToolBarSubrayado_);
+    connect(actToolBarSubrayado_, SIGNAL(triggered()), this, SLOT(alSubrayado()));
+
+
 
 }
 
@@ -135,11 +151,10 @@ NotepadWindow::~NotepadWindow()
     mnuAyuda_->deleteLater();
     actAyudaAcercade_->deleteLater();
     toolbarMenu_->deleteLater();
-    actToolbarCopiar_->deleteLater();
-    actToolbarPegar_->deleteLater();
-    actToolbarGuardar_->deleteLater();
-    actToolbarDeshacer_->deleteLater();
-    actToolbarRehacer_->deleteLater();
+    actToolBarNegrita_->deleteLater();
+    actToolBarCursiva_->deleteLater();
+    actToolBarSubrayado_->deleteLater();
+
 }
 
 void NotepadWindow::alAbrir()
@@ -184,9 +199,6 @@ void NotepadWindow::alFuente()
         // Si el usuario hizo click en OK, se establece la fuente seleccionada
         txtEditor_->setCurrentFont(font);
 
-        //Se aplica solo a lo seleccionado, PERO tambien a lo que escribas despues
-        //El fallo posiblemente este en la forma de aplicar a setCurrentFont, que se lo aplico a lo seleccionado, pero tambien lo dejo como
-        //fuente de todo txtEditor_ menos de lo que ya estaba escrito pero no seleccionado que no cambia
     }
 }
 
@@ -212,4 +224,69 @@ void NotepadWindow::alAcercade()
     mensajeAyuda.show();
     */
 
+}
+
+void NotepadWindow::alNegrita()
+{
+    //Cogemos lo que tengamos seleccionado
+    QTextCursor seleccionado = txtEditor_->textCursor();
+
+    //Ahora cogemos el formato en el que esta
+    QTextCharFormat formato = seleccionado.charFormat();
+
+    //Ahora creamos una fuente para poner o quitar la negrita
+    QFont font;
+
+    //Comprobamos si lo seleccionado esta en negrita o no, para quitar o poner
+    if(formato.fontWeight() != QFont::Bold)
+        font.setBold(true); //Como no esta negrita lo ponemos
+    else
+        font.setBold(false); //Como esta negrita lo quitamos
+
+    //Ponemos la fuente
+    txtEditor_->setCurrentFont(font);
+
+}
+
+void NotepadWindow::alCursiva()
+{
+    //Cogemos lo que tengamos seleccionado
+    QTextCursor seleccionado = txtEditor_->textCursor();
+
+    //Ahora cogemos el formato en el que esta
+    QTextCharFormat formato = seleccionado.charFormat();
+
+    //Ahora creamos una fuente para poner o quitar la cursiva
+    QFont font;
+
+    //Comprobamos si lo seleccionado esta en negrita o no, para quitar o poner
+    if(!formato.fontItalic())
+        font.setItalic(true); //Como no esta cursiva lo ponemos
+    else
+        font.setItalic(false); //Como esta cursiva lo quitamos
+
+    //Ponemos la fuente
+    txtEditor_->setCurrentFont(font);
+
+}
+
+void NotepadWindow::alSubrayado()
+{
+    //Cogemos lo que tengamos seleccionado
+    QTextCursor seleccionado = txtEditor_->textCursor();
+
+    //Ahora cogemos el formato en el que esta
+    QTextCharFormat formato = seleccionado.charFormat();
+
+    //Ahora creamos una fuente para poner o quitar lo subrayado
+    QFont font;
+
+    //Comprobamos si lo seleccionado esta en negrita o no, para quitar o poner
+    if(!formato.fontUnderline())
+        font.setUnderline(true); //Como no esta subrayado lo ponemos
+    else
+        font.setUnderline(false); //Como esta subrayado lo quitamos
+
+    //Ponemos la fuente
+    txtEditor_->setCurrentFont(font);
 }
